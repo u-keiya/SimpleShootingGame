@@ -9,11 +9,12 @@ class Player {
         this.maxShootCooldown = 10;
     }
 
-    update(keys, canvasWidth, canvasHeight) {
+    update(keys, canvasWidth, canvasHeight, touchControls = null) {
         if (this.shootCooldown > 0) {
             this.shootCooldown--;
         }
 
+        // Keyboard controls
         if ((keys['ArrowLeft'] || keys['a'] || keys['A']) && this.x > 0) {
             this.x -= this.speed;
         }
@@ -25,6 +26,32 @@ class Player {
         }
         if ((keys['ArrowDown'] || keys['s'] || keys['S']) && this.y < canvasHeight - this.height) {
             this.y += this.speed;
+        }
+
+        // Touch controls
+        if (touchControls && touchControls.moveTouch !== null) {
+            const moveAreaWidth = window.innerWidth * 0.5;
+            const moveAreaHeight = 120;
+            
+            // Convert touch position to movement direction
+            const centerX = moveAreaWidth / 2;
+            const centerY = moveAreaHeight / 2;
+            
+            const deltaX = touchControls.moveX - centerX;
+            const deltaY = touchControls.moveY - centerY;
+            
+            // Apply movement based on touch position relative to center
+            if (Math.abs(deltaX) > 20) {
+                const moveX = (deltaX / centerX) * this.speed;
+                this.x += moveX;
+                this.x = Math.max(0, Math.min(canvasWidth - this.width, this.x));
+            }
+            
+            if (Math.abs(deltaY) > 20) {
+                const moveY = (deltaY / centerY) * this.speed;
+                this.y += moveY;
+                this.y = Math.max(0, Math.min(canvasHeight - this.height, this.y));
+            }
         }
     }
 

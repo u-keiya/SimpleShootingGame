@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    padding: 20px;
+    padding: 10px;
     background: linear-gradient(135deg, #000428, #004e92);
     font-family: 'Arial', sans-serif;
     display: flex;
@@ -8,6 +8,9 @@ body {
     align-items: center;
     min-height: 100vh;
     color: white;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
 }
 
 .game-container {
@@ -73,4 +76,96 @@ body {
     margin-top: 15px;
     font-size: 14px;
     color: #aaa;
+}
+
+.mobile-only {
+    display: none;
+}
+
+.mobile-controls {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: rgba(0, 0, 0, 0.3);
+    border-top: 2px solid #00ff41;
+    z-index: 1000;
+}
+
+.control-area {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #00ff41;
+    border: 1px solid rgba(0, 255, 65, 0.3);
+    background: rgba(0, 255, 65, 0.1);
+    touch-action: none;
+}
+
+#moveArea {
+    left: 0;
+}
+
+#shootArea {
+    right: 0;
+}
+
+.control-area:active {
+    background: rgba(0, 255, 65, 0.3);
+}
+
+.control-hint {
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 5px;
+    }
+    
+    .instructions p:first-child {
+        display: none;
+    }
+    
+    .mobile-only {
+        display: block;
+    }
+    
+    .mobile-controls {
+        display: block;
+    }
+    
+    .game-container {
+        margin-bottom: 120px;
+    }
+    
+    .ui {
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+    
+    .score, .lives {
+        padding: 8px 12px;
+    }
+    
+    #gameCanvas {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+        aspect-ratio: 4/7;
+    }
+}
+
+@media (max-height: 800px) {
+    #gameCanvas {
+        height: 60vh;
+        width: auto;
+    }
 }

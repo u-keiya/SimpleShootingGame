@@ -2,7 +2,7 @@ class Game {
     constructor() {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
-        this.player = new Player(380, 550);
+        this.player = new Player(180, 650);
         this.bullets = [];
         this.enemies = [];
         this.keys = {};
@@ -11,8 +11,15 @@ class Game {
         this.gameRunning = true;
         this.enemySpawnTimer = 0;
         this.enemySpawnRate = 120;
+        this.touchControls = {
+            moveTouch: null,
+            shootTouch: null,
+            moveX: 0,
+            moveY: 0
+        };
         
         this.setupEventListeners();
+        this.setupTouchControls();
         this.gameLoop();
     }
 
@@ -34,6 +41,53 @@ class Game {
         });
     }
 
+    setupTouchControls() {
+        const moveArea = document.getElementById('moveArea');
+        const shootArea = document.getElementById('shootArea');
+
+        moveArea.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            this.touchControls.moveTouch = touch.identifier;
+            const rect = moveArea.getBoundingClientRect();
+            this.touchControls.moveX = touch.clientX - rect.left;
+            this.touchControls.moveY = touch.clientY - rect.top;
+        });
+
+        moveArea.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            for (let touch of e.touches) {
+                if (touch.identifier === this.touchControls.moveTouch) {
+                    const rect = moveArea.getBoundingClientRect();
+                    this.touchControls.moveX = touch.clientX - rect.left;
+                    this.touchControls.moveY = touch.clientY - rect.top;
+                    break;
+                }
+            }
+        });
+
+        moveArea.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            this.touchControls.moveTouch = null;
+            this.touchControls.moveX = 0;
+            this.touchControls.moveY = 0;
+        });
+
+        shootArea.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const bullet = this.player.shoot();
+            if (bullet) {
+                this.bullets.push(bullet);
+            }
+        });
+
+        document.addEventListener('touchstart', (e) => {
+            if (e.target.id !== 'moveArea' && e.target.id !== 'shootArea') {
+                e.preventDefault();
+            }
+        });
+    }
+
     spawnEnemy() {
         const x = Math.random() * (this.canvas.width - 30);
         this.enemies.push(new Enemy(x, -25));
@@ -42,7 +96,7 @@ class Game {
     update() {
         if (!this.gameRunning) return;
 
-        this.player.update(this.keys, this.canvas.width, this.canvas.height);
+        this.player.update(this.keys, this.canvas.width, this.canvas.height, this.touchControls);
 
         this.bullets.forEach(bullet => bullet.update());
         this.bullets = this.bullets.filter(bullet => !bullet.isOffScreen(this.canvas.height));
@@ -136,7 +190,7 @@ class Game {
     }
 
     restart() {
-        this.player = new Player(380, 550);
+        this.player = new Player(180, 650);
         this.bullets = [];
         this.enemies = [];
         this.score = 0;
