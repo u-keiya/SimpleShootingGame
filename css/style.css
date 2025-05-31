@@ -1,0 +1,76 @@
+body {
+    margin: 0;
+    padding: 20px;
+    background: linear-gradient(135deg, #000428, #004e92);
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: white;
+}
+
+.game-container {
+    text-align: center;
+    position: relative;
+}
+
+.ui {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.score, .lives {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 2px solid #00ff41;
+}
+
+#gameCanvas {
+    border: 3px solid #00ff41;
+    background: radial-gradient(circle at center, #001122, #000011);
+    box-shadow: 0 0 20px #00ff41;
+}
+
+.game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    padding: 30px;
+    border-radius: 10px;
+    border: 2px solid #ff4444;
+    box-shadow: 0 0 20px #ff4444;
+}
+
+.game-over h2 {
+    color: #ff4444;
+    margin-top: 0;
+}
+
+.game-over button {
+    background: #00ff41;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.game-over button:hover {
+    background: #00cc33;
+}
+
+.instructions {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #aaa;
+}
