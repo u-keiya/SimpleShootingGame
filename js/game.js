@@ -26,14 +26,6 @@ class Game {
     setupEventListeners() {
         document.addEventListener('keydown', (e) => {
             this.keys[e.key] = true;
-            
-            if (e.key === ' ' || e.key === 'Spacebar') {
-                e.preventDefault();
-                const bullet = this.player.shoot();
-                if (bullet) {
-                    this.bullets.push(bullet);
-                }
-            }
         });
 
         document.addEventListener('keyup', (e) => {
@@ -73,13 +65,7 @@ class Game {
             this.touchControls.moveY = 0;
         });
 
-        shootArea.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            const bullet = this.player.shoot();
-            if (bullet) {
-                this.bullets.push(bullet);
-            }
-        });
+        // Touch shooting removed - auto-shoot is now active
 
         document.addEventListener('touchstart', (e) => {
             if (e.target.id !== 'moveArea' && e.target.id !== 'shootArea') {
@@ -97,6 +83,12 @@ class Game {
         if (!this.gameRunning) return;
 
         this.player.update(this.keys, this.canvas.width, this.canvas.height, this.touchControls);
+
+        // Auto-shoot functionality
+        const bullet = this.player.shoot();
+        if (bullet) {
+            this.bullets.push(bullet);
+        }
 
         this.bullets.forEach(bullet => bullet.update());
         this.bullets = this.bullets.filter(bullet => !bullet.isOffScreen(this.canvas.height));
